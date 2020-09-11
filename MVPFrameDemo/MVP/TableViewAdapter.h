@@ -12,12 +12,18 @@
 NS_ASSUME_NONNULL_BEGIN
 
 typedef void (^ConfigureBlock)(id cell, id model, NSIndexPath * indexPath);
+typedef void (^DidSelectedRow)(id cell, id model, NSIndexPath * indexPath);
 
-@interface TableViewAdapter : NSObject<UITableViewDataSource>
+@interface TableViewAdapter : NSObject<UITableViewDataSource, UITableViewDelegate>
 
 - (instancetype)initWithIdentifier:(NSString *)identifier configureBlock:(ConfigureBlock)block;
+- (void)setRowHeight:(CGFloat)rowHeight didSelectedRow:(DidSelectedRow)block;
+
+- (void)didSelectedRow:(DidSelectedRow)block;
+
 - (void)addModels:(NSArray *)models;
 
 @end
+
 
 NS_ASSUME_NONNULL_END

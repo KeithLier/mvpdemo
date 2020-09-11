@@ -11,8 +11,10 @@
 @interface TableViewAdapter ()
 
 @property (nonatomic, strong) NSString *cellIdentifier;
-@property (nonatomic, copy) ConfigureBlock configureBlock;
 @property (nonatomic, strong) NSMutableArray *models;
+@property (assign, nonatomic) CGFloat rowHeight;
+@property (nonatomic, copy) ConfigureBlock configureBlock;
+@property (nonatomic, copy) DidSelectedRow didSelected;
 
 @end
 
@@ -23,6 +25,7 @@
     if (self) {
         self.cellIdentifier = identifier;
         self.configureBlock = block;
+        self.rowHeight = 44.0;
     }
     return self;
 }
@@ -41,10 +44,33 @@
     return _models;
 }
 
+- (void)setRowHeight:(CGFloat)rowHeight didSelectedRow:(DidSelectedRow)block {
+    self.rowHeight = rowHeight;
+    self.didSelected = block;
+}
+
+- (void)didSelectedRow:(DidSelectedRow)block {
+    self.didSelected = block;
+}
+
 - (id)itemAtIndexPath:(NSIndexPath *)indexPath {
     return self.models[(NSUInteger) indexPath.row];
 }
 
+#pragma -mark UITableViewDelegate
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return self.rowHeight;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+    id item = [self itemAtIndexPath:indexPath];
+    self.didSelected(cell, item, indexPath);
+}
+
+#pragma -mark UITableViewDatasource
 - (NSInteger)tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return self.models.count;
 }

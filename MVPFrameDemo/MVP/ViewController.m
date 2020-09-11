@@ -38,9 +38,17 @@
         cell.delegate = strongSelf.present;
         cell.indexPath = indexPath;
     }];
+    // 设置cell高度
+    [self.dataSource setRowHeight:80 didSelectedRow:^(id  _Nonnull cell, id  _Nonnull model, NSIndexPath * _Nonnull indexPath) {
+        
+    }];
+//    [self.dataSource didSelectedRow:^(id  _Nonnull cell, id  _Nonnull model, NSIndexPath * _Nonnull indexPath) {
+//        
+//    }];
     
     // 设置代理
     self.tableView.dataSource = self.dataSource;
+    self.tableView.delegate = self.dataSource;
     [self.dataSource addModels:self.present.dataArray];
 }
 
