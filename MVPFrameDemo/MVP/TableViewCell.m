@@ -32,8 +32,9 @@
 
 - (IBAction)minus:(id)sender {
     NSInteger num = [self.numLabel.text integerValue];
-    if (num >= 0) {
-        num--;
+    num--;
+    if (num <= 0) {
+        num = 99;
     }
     [self setNumber:[NSString stringWithFormat:@"%ld",num]];
 }
